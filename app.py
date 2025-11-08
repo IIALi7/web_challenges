@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory, abort
 import sqlite3, os, pathlib
 
@@ -7,6 +8,7 @@ UPLOADS_DIR = BASE_DIR / "uploads"
 DB_PATH = BASE_DIR / "users.db"
 
 app = Flask(__name__)
+os.makedirs('uploads', exist_ok=True)
 app.secret_key = 'ctf_insecure_secret'
 app.config['UPLOAD_FOLDER'] = str(UPLOADS_DIR)
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2MB
