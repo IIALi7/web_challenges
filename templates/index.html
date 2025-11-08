@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Mini Web Vuln Lab</title></head>
+  <body>
+    <h1>Mini Web Vulnerability Lab</h1>
+    <ul>
+      <li><a href="/view?file=gift.png">Path Traversal demo (view gift)</a></li>
+      <li><a href="/user?id=1">SQLi demo (user)</a></li>
+      <li><a href="/upload">File Upload demo</a></li>
+      <li>Hidden demo: try discovering files under <code>/hidden/</code></li>
+    </ul>
+    <p>Files available in <code>/files</code> (sample). Try path traversal with <code>?file=../../etc_passwd.txt</code></p>
+  </body>
+</html>

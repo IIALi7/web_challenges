@@ -1,0 +1,15 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Users</title></head>
+<body>
+<h2>Query</h2>
+<pre>{{query}}</pre>
+<h3>Rows</h3>
+<ul>
+{% for r in rows %}
+  <li>{{r}}</li>
+{% else %}
+  <li>No rows</li>
+{% endfor %}
+</ul>
+<p><a href="/">Back</a></p>
+</body></html>
