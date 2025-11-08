@@ -7,6 +7,7 @@ UPLOADS_DIR = BASE_DIR / "uploads"
 DB_PATH = BASE_DIR / "users.db"
 
 app = Flask(__name__)
+app.secret_key = 'ctf_insecure_secret'
 app.config['UPLOAD_FOLDER'] = str(UPLOADS_DIR)
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2MB
 
@@ -111,6 +112,48 @@ def hidden(name):
     if full.exists():
         return send_from_directory(str(hidden_dir), name)
     abort(404)
+
+
+
+# === CTF challenge routes ===
+from flask import session, flash
+
+@app.route("/login", methods=["GET","POST"])
+def login():
+    if request.method == "POST":
+        user = request.form.get("username","")
+        pw = request.form.get("password","")
+        if (user == "admin" and pw == "admin123") or (user == "guest" and pw == "guest"):
+            session['authed'] = True
+            return redirect(url_for("secret"))
+        else:
+            return "Login failed", 401
+    return '''
+      <h2>Login (CTF challenge)</h2>
+      <form method="post">
+        <input name="username" placeholder="username"><br>
+        <input name="password" placeholder="password"><br>
+        <input type="submit" value="Login">
+      </form>
+    '''
+
+@app.route("/secret")
+def secret():
+    if not session.get('authed'):
+        return redirect(url_for('login'))
+    return "<h2>Secret area</h2><p>Flag: CSC{BRUTE_FORCE_FLAG_4}</p>"
+
+@app.route("/challenge/path")
+def challenge_path():
+    return '<p>Try: /view?file=../../files/flags/flag_path.txt</p>'
+
+@app.route("/challenge/sqli")
+def challenge_sqli():
+    return '<p>Try: /user?id=1 OR 1=1<br>Union example: /user?id=1 UNION SELECT 1,flag FROM flags-- </p>'
+
+@app.route("/challenge/upload")
+def challenge_upload():
+    return '<p>Upload a file at /upload (e.g. myflag.txt) then access /uploads/myflag.txt</p>'
 
 if __name__ == "__main__":
     import os

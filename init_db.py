@@ -6,8 +6,12 @@ if DB.exists():
 else:
     conn = sqlite3.connect(DB)
     cur = conn.cursor()
-    cur.execute("CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT);")
-    cur.executemany("INSERT INTO users(id, username) VALUES (?, ?);", [(1,'admin'),(2,'ali'),(3,'mohammed')])
+    cur.execute("CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT, password TEXT);")
+    cur.executemany("INSERT INTO users(id, username, password) VALUES (?, ?, ?);",
+                    [(1,'admin','admin123'), (2,'guest','guest')])
+    # create flags table for SQLi challenge
+    cur.execute("CREATE TABLE flags(id INTEGER PRIMARY KEY, flag TEXT);")
+    cur.execute("INSERT INTO flags(flag) VALUES (?)", ("CSC{SQLI_FLAG_2}",))
     conn.commit()
     conn.close()
     print("Created DB at", DB)
